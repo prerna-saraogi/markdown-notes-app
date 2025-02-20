@@ -16,7 +16,7 @@ export default function App() {
 
   const currentNote = notes.find((note) => note.id === currentNoteId) || notes[0];
 
-  const sortedNotes = notes.sort((a, b) => b.updatedAt - a.updatedAt);
+  const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode", isDarkMode);
@@ -36,7 +36,7 @@ export default function App() {
       }))
       setNotes(notesArray);
     })
-    return unsubscribe;
+    return () => unsubscribe();
   }, [])
 
   useEffect(() => {
@@ -110,7 +110,11 @@ export default function App() {
         </Split>
       ) : (
         <div className="no-notes">
-          <h1>You have no notes</h1>
+          <div className="app-heading">
+            <img src="/notes-logo.png" alt="Notes-logo" />
+            <h1>Markdown Notes App</h1>
+          </div>
+          <h2>You have no notes</h2>
           <button className="first-note" onClick={createNewNote}>
             Create one now
           </button>

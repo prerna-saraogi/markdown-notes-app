@@ -10,7 +10,7 @@ export default function Sidebar(props) {
                     }`}
                 onClick={() => props.setCurrentNoteId(note.id)}
             >
-                <h4 className="text-snippet">{(note.body).split("\n")[0]}</h4>
+                <h4 className="text-snippet">{(note.body).split("\n")[0].slice(1)}</h4>
                 <button
                     className="delete-btn"
                     onClick={() => props.deleteNote(note.id)}
@@ -24,15 +24,20 @@ export default function Sidebar(props) {
     return (
         <section className="pane sidebar">
             <div className="sidebar--header">
-                <h3>Notes</h3>
-                <button className="new-note" onClick={props.newNote}>+</button>
-                <DarkModeSwitch
-                    checked={!props.isDarkMode}
-                    onChange={props.toggleTheme}
-                    size={30}
-                    moonColor="#f1c40f"
-                    sunColor="#f39c12"
-                />
+                <div className="left">
+                    <img src="/notes-logo.png" alt="App Logo" className="logo" />
+                    <h3>Notes</h3>
+                </div>
+                <div className="right">
+                    <button className="new-note" onClick={props.newNote}>+</button>
+                    <DarkModeSwitch
+                        checked={!props.isDarkMode}
+                        onChange={props.toggleTheme}
+                        size={30}
+                        moonColor="#f1c40f"
+                        sunColor="#f39c12"
+                    />
+                </div>
             </div>
             {noteElements}
         </section>
