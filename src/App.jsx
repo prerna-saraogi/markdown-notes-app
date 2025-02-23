@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import Sidebar from './components/Sidebar';
 import Editor from './components/Editor';
@@ -14,9 +14,12 @@ export default function App() {
     () => localStorage.getItem("theme") === "dark"
   );
 
-  const currentNote = notes.find((note) => note.id === currentNoteId) || notes[0];
+  // wrapping inside useMemo to avoid unnecessary re-sorting
+  const sortedNotes = useMemo(() => {
+    return [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
+  }, [notes]);
 
-  const sortedNotes = [...notes].sort((a, b) => b.updatedAt - a.updatedAt);
+  const currentNote = sortedNotes.find((note) => note.id === currentNoteId) || sortedNotes[0];
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark-mode", isDarkMode);
@@ -40,10 +43,10 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!currentNote) {
-      setCurrentNoteId(notes[0]?.id)
+    if (!currentNoteId && sortedNotes.length > 0) {
+      setCurrentNoteId(sortedNotes[0]?.id)
     }
-  }, [notes])
+  }, [sortedNotes])
 
   useEffect(() => {
     if (currentNote) {
